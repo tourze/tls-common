@@ -5,6 +5,7 @@
   "license": "MIT",
   "require": {
     "php": "^8.1",
+    "ext-ctype": "*",
     "psr/log": "^3|^2|^1"
   },
   "require-dev": {
