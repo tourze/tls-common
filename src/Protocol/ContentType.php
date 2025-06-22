@@ -2,13 +2,21 @@
 
 namespace Tourze\TLSCommon\Protocol;
 
+use Tourze\EnumExtra\Itemable;
+use Tourze\EnumExtra\ItemTrait;
+use Tourze\EnumExtra\Labelable;
+use Tourze\EnumExtra\Selectable;
+use Tourze\EnumExtra\SelectTrait;
+
 /**
  * TLS记录层内容类型枚举
  *
  * 参考: https://www.rfc-editor.org/rfc/rfc8446#section-5.1
  */
-enum ContentType: int
+enum ContentType: int implements Itemable, Labelable, Selectable
 {
+    use ItemTrait;
+    use SelectTrait;
     /**
      * 变更密码规范协议
      */
@@ -88,4 +96,18 @@ enum ContentType: int
      * 参考: https://www.rfc-editor.org/rfc/rfc8446#section-5.1
      */
     public const TLS13_APPLICATION_DATA = 23;
+
+    /**
+     * 获取内容类型的中文标签
+     */
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::CHANGE_CIPHER_SPEC => '变更密码规范',
+            self::ALERT => '警告',
+            self::HANDSHAKE => '握手',
+            self::APPLICATION_DATA => '应用数据',
+            self::HEARTBEAT => '心跳',
+        };
+    }
 }

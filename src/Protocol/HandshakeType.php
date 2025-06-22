@@ -2,13 +2,21 @@
 
 namespace Tourze\TLSCommon\Protocol;
 
+use Tourze\EnumExtra\Itemable;
+use Tourze\EnumExtra\ItemTrait;
+use Tourze\EnumExtra\Labelable;
+use Tourze\EnumExtra\Selectable;
+use Tourze\EnumExtra\SelectTrait;
+
 /**
  * TLS握手消息类型枚举
  *
  * 参考: https://www.rfc-editor.org/rfc/rfc8446#section-4
  */
-enum HandshakeType: int
+enum HandshakeType: int implements Itemable, Labelable, Selectable
 {
+    use ItemTrait;
+    use SelectTrait;
     /**
      * 客户端Hello消息
      */
@@ -153,5 +161,30 @@ enum HandshakeType: int
         }
 
         return sprintf('未知握手类型(0x%02X)', $type);
+    }
+
+    /**
+     * 获取握手类型的中文标签
+     */
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::CLIENT_HELLO => '客户端Hello',
+            self::SERVER_HELLO => '服务器Hello',
+            self::HELLO_VERIFY_REQUEST => 'Hello验证请求',
+            self::NEW_SESSION_TICKET => '新会话票据',
+            self::END_OF_EARLY_DATA => '早期数据结束',
+            self::ENCRYPTED_EXTENSIONS => '加密扩展',
+            self::CERTIFICATE => '证书',
+            self::SERVER_KEY_EXCHANGE => '服务器密钥交换',
+            self::CERTIFICATE_REQUEST => '证书请求',
+            self::SERVER_HELLO_DONE => '服务器Hello完成',
+            self::CERTIFICATE_VERIFY => '证书验证',
+            self::CLIENT_KEY_EXCHANGE => '客户端密钥交换',
+            self::FINISHED => '完成',
+            self::CERTIFICATE_STATUS => '证书状态',
+            self::KEY_UPDATE => '密钥更新',
+            self::MESSAGE_HASH => '消息哈希',
+        };
     }
 }

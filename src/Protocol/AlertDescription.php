@@ -2,13 +2,21 @@
 
 namespace Tourze\TLSCommon\Protocol;
 
+use Tourze\EnumExtra\Itemable;
+use Tourze\EnumExtra\ItemTrait;
+use Tourze\EnumExtra\Labelable;
+use Tourze\EnumExtra\Selectable;
+use Tourze\EnumExtra\SelectTrait;
+
 /**
  * TLS警告描述枚举
  *
  * 参考: https://www.rfc-editor.org/rfc/rfc8446#section-6.2
  */
-enum AlertDescription: int
+enum AlertDescription: int implements Itemable, Labelable, Selectable
 {
+    use ItemTrait;
+    use SelectTrait;
     /**
      * 关闭通知
      *
@@ -341,5 +349,46 @@ enum AlertDescription: int
         }
 
         return sprintf('未知警告描述(0x%02X)', $description);
+    }
+
+    /**
+     * 获取警告描述的中文标签
+     */
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::CLOSE_NOTIFY => '关闭通知',
+            self::UNEXPECTED_MESSAGE => '意外消息',
+            self::BAD_RECORD_MAC => '错误的MAC',
+            self::DECRYPTION_FAILED => '解密失败',
+            self::RECORD_OVERFLOW => '记录溢出',
+            self::DECOMPRESSION_FAILURE => '解压缩失败',
+            self::HANDSHAKE_FAILURE => '握手失败',
+            self::NO_CERTIFICATE => '无证书',
+            self::BAD_CERTIFICATE => '错误证书',
+            self::UNSUPPORTED_CERTIFICATE => '不支持的证书',
+            self::CERTIFICATE_REVOKED => '证书吊销',
+            self::CERTIFICATE_EXPIRED => '证书过期',
+            self::CERTIFICATE_UNKNOWN => '未知证书',
+            self::ILLEGAL_PARAMETER => '非法参数',
+            self::UNKNOWN_CA => '未知CA',
+            self::ACCESS_DENIED => '拒绝访问',
+            self::DECODE_ERROR => '解码错误',
+            self::DECRYPT_ERROR => '解密错误',
+            self::PROTOCOL_VERSION => '协议版本',
+            self::INSUFFICIENT_SECURITY => '安全性不足',
+            self::INTERNAL_ERROR => '内部错误',
+            self::INAPPROPRIATE_FALLBACK => '不适当的回退',
+            self::USER_CANCELED => '用户取消',
+            self::MISSING_EXTENSION => '缺少扩展',
+            self::UNSUPPORTED_EXTENSION => '不支持的扩展',
+            self::CERTIFICATE_UNOBTAINABLE => '认证消息过长',
+            self::UNRECOGNIZED_NAME => '不认识的名称',
+            self::BAD_CERTIFICATE_STATUS_RESPONSE => '错误的证书状态响应',
+            self::BAD_CERTIFICATE_HASH_VALUE => '错误的证书哈希值',
+            self::UNKNOWN_PSK_IDENTITY => '未知的PSK身份',
+            self::CERTIFICATE_REQUIRED => '证书需要',
+            self::NO_APPLICATION_PROTOCOL => '无应用协议',
+        };
     }
 }

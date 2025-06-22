@@ -2,13 +2,21 @@
 
 namespace Tourze\TLSCommon\Protocol;
 
+use Tourze\EnumExtra\Itemable;
+use Tourze\EnumExtra\ItemTrait;
+use Tourze\EnumExtra\Labelable;
+use Tourze\EnumExtra\Selectable;
+use Tourze\EnumExtra\SelectTrait;
+
 /**
  * TLS警告级别枚举
  *
  * 参考: https://www.rfc-editor.org/rfc/rfc8446#section-6
  */
-enum AlertLevel: int
+enum AlertLevel: int implements Itemable, Labelable, Selectable
 {
+    use ItemTrait;
+    use SelectTrait;
     /**
      * 警告级别
      *
@@ -57,5 +65,16 @@ enum AlertLevel: int
         }
 
         return sprintf('未知警告级别(0x%02X)', $level);
+    }
+
+    /**
+     * 获取警告级别的中文标签
+     */
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::WARNING => '警告',
+            self::FATAL => '致命',
+        };
     }
 }

@@ -2,13 +2,21 @@
 
 namespace Tourze\TLSCommon;
 
+use Tourze\EnumExtra\Itemable;
+use Tourze\EnumExtra\ItemTrait;
+use Tourze\EnumExtra\Labelable;
+use Tourze\EnumExtra\Selectable;
+use Tourze\EnumExtra\SelectTrait;
+
 /**
  * TLS协议版本枚举
  *
  * 参考: https://www.rfc-editor.org/rfc/rfc8446
  */
-enum Version: int
+enum Version: int implements Itemable, Labelable, Selectable
 {
+    use ItemTrait;
+    use SelectTrait;
     /**
      * SSL 3.0 版本号
      */
@@ -101,5 +109,19 @@ enum Version: int
         }
 
         return false;
+    }
+
+    /**
+     * 获取版本的中文标签
+     */
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::SSL_3_0 => 'SSL 3.0 (不安全)',
+            self::TLS_1_0 => 'TLS 1.0 (已弃用)',
+            self::TLS_1_1 => 'TLS 1.1 (已弃用)',
+            self::TLS_1_2 => 'TLS 1.2',
+            self::TLS_1_3 => 'TLS 1.3 (推荐)',
+        };
     }
 }

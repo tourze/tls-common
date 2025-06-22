@@ -142,11 +142,6 @@ class ByteBuffer
         // PHP的整数可能是有符号的，所以使用位运算需要特别注意
         $value = ((ord($data[0]) << 24) | (ord($data[1]) << 16) | (ord($data[2]) << 8) | ord($data[3])) & 0xFFFFFFFF;
 
-        // 由于PHP在32位系统上可能将大整数视为负数，我们确保转换为正确的无符号值
-        if ($value < 0) {
-            $value = sprintf('%u', $value);
-        }
-
         return $value;
     }
 

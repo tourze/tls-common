@@ -2,11 +2,19 @@
 
 namespace Tourze\TLSCommon\Protocol;
 
+use Tourze\EnumExtra\Itemable;
+use Tourze\EnumExtra\ItemTrait;
+use Tourze\EnumExtra\Labelable;
+use Tourze\EnumExtra\Selectable;
+use Tourze\EnumExtra\SelectTrait;
+
 /**
  * TLS协议版本枚举
  */
-enum TLSVersion: int
+enum TLSVersion: int implements Itemable, Labelable, Selectable
 {
+    use ItemTrait;
+    use SelectTrait;
     /**
      * SSL 3.0
      * 历史版本，不推荐使用
@@ -39,7 +47,7 @@ enum TLSVersion: int
     
     /**
      * 获取版本的名称
-     * 
+     *
      * @return string 版本名称
      */
     public function getName(): string
@@ -55,7 +63,7 @@ enum TLSVersion: int
     
     /**
      * 判断版本是否安全
-     * 
+     *
      * @return bool 是否安全
      */
     public function isSecure(): bool
@@ -70,7 +78,7 @@ enum TLSVersion: int
     
     /**
      * 获取版本的名称（静态方法）
-     * 
+     *
      * @param int $version 版本值
      * @return string 版本名称
      */
@@ -86,7 +94,7 @@ enum TLSVersion: int
     
     /**
      * 获取推荐的版本列表（按优先级排序）
-     * 
+     *
      * @return array<TLSVersion> 推荐的版本列表
      */
     public static function getRecommendedVersions(): array
@@ -95,5 +103,19 @@ enum TLSVersion: int
             self::TLS_1_3,
             self::TLS_1_2,
         ];
+    }
+
+    /**
+     * 获取TLS版本的中文标签
+     */
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::SSL_3_0 => 'SSL 3.0',
+            self::TLS_1_0 => 'TLS 1.0',
+            self::TLS_1_1 => 'TLS 1.1',
+            self::TLS_1_2 => 'TLS 1.2',
+            self::TLS_1_3 => 'TLS 1.3',
+        };
     }
 } 
