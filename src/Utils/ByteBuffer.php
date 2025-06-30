@@ -2,8 +2,8 @@
 
 namespace Tourze\TLSCommon\Utils;
 
-use InvalidArgumentException;
-use OutOfBoundsException;
+use Tourze\TLSCommon\Exception\InvalidArgumentException;
+use Tourze\TLSCommon\Exception\OutOfBoundsException;
 use Tourze\TLSCommon\Exception\ProtocolException;
 
 /**

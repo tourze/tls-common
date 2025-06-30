@@ -2,7 +2,7 @@
 
 namespace Tourze\TLSCommon\Utils;
 
-use InvalidArgumentException;
+use Tourze\TLSCommon\Exception\InvalidArgumentException;
 
 /**
  * 十六进制数据转换工具

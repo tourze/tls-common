@@ -2,7 +2,7 @@
 
 namespace Tourze\TLSCommon\Tests\Utils;
 
-use InvalidArgumentException;
+use Tourze\TLSCommon\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Tourze\TLSCommon\Utils\Base64;
 

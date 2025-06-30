@@ -2,8 +2,8 @@
 
 namespace Tourze\TLSCommon\Tests\Utils;
 
-use InvalidArgumentException;
-use OutOfBoundsException;
+use Tourze\TLSCommon\Exception\InvalidArgumentException;
+use Tourze\TLSCommon\Exception\OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 use Tourze\TLSCommon\Exception\ProtocolException;
 use Tourze\TLSCommon\Utils\ByteBuffer;

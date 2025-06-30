@@ -2,7 +2,7 @@
 
 namespace Tourze\TLSCommon\Utils;
 
-use InvalidArgumentException;
+use Tourze\TLSCommon\Exception\InvalidArgumentException;
 
 /**
  * Base64编解码工具
