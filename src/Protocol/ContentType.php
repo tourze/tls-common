@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\TLSCommon\Protocol;
 
 use Tourze\EnumExtra\Itemable;
@@ -62,6 +64,7 @@ enum ContentType: int implements Itemable, Labelable, Selectable
      * 从整数值获取内容类型枚举
      *
      * @param int $type 内容类型整数值
+     *
      * @return self|null 对应的枚举值，如果不存在则返回null
      */
     public static function fromInt(int $type): ?self
@@ -82,7 +85,7 @@ enum ContentType: int implements Itemable, Labelable, Selectable
     public static function toString(int $type): string
     {
         $enum = self::fromInt($type);
-        if ($enum !== null) {
+        if (null !== $enum) {
             return $enum->asString();
         }
 

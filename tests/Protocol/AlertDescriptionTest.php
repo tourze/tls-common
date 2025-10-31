@@ -2,12 +2,17 @@
 
 namespace Tourze\TLSCommon\Tests\Protocol;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Tourze\PHPUnitEnum\AbstractEnumTestCase;
 use Tourze\TLSCommon\Protocol\AlertDescription;
 
-final class AlertDescriptionTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(AlertDescription::class)]
+final class AlertDescriptionTest extends AbstractEnumTestCase
 {
-    public function testAlertDescriptionConstants()
+    public function testAlertDescriptionConstants(): void
     {
         $this->assertSame(0, AlertDescription::CLOSE_NOTIFY->value);
         $this->assertSame(10, AlertDescription::UNEXPECTED_MESSAGE->value);
@@ -43,7 +48,7 @@ final class AlertDescriptionTest extends TestCase
         $this->assertSame(120, AlertDescription::NO_APPLICATION_PROTOCOL->value);
     }
 
-    public function testAsString()
+    public function testAsString(): void
     {
         $this->assertSame('close_notify', AlertDescription::CLOSE_NOTIFY->asString());
         $this->assertSame('unexpected_message', AlertDescription::UNEXPECTED_MESSAGE->asString());
@@ -54,7 +59,7 @@ final class AlertDescriptionTest extends TestCase
         $this->assertSame('handshake_failure', AlertDescription::HANDSHAKE_FAILURE->asString());
     }
 
-    public function testFromInt_withValidValues()
+    public function testFromIntWithValidValues(): void
     {
         $this->assertSame(AlertDescription::CLOSE_NOTIFY, AlertDescription::fromInt(0));
         $this->assertSame(AlertDescription::UNEXPECTED_MESSAGE, AlertDescription::fromInt(10));
@@ -64,14 +69,14 @@ final class AlertDescriptionTest extends TestCase
         $this->assertSame(AlertDescription::NO_APPLICATION_PROTOCOL, AlertDescription::fromInt(120));
     }
 
-    public function testFromInt_withInvalidValues()
+    public function testFromIntWithInvalidValues(): void
     {
         $this->assertNull(AlertDescription::fromInt(1));
         $this->assertNull(AlertDescription::fromInt(200));
         $this->assertNull(AlertDescription::fromInt(-1));
     }
 
-    public function testToString_withValidValues()
+    public function testToStringWithValidValues(): void
     {
         $this->assertSame('close_notify', AlertDescription::toString(0));
         $this->assertSame('unexpected_message', AlertDescription::toString(10));
@@ -81,10 +86,27 @@ final class AlertDescriptionTest extends TestCase
         $this->assertSame('no_application_protocol', AlertDescription::toString(120));
     }
 
-    public function testToString_withInvalidValues()
+    public function testToStringWithInvalidValues(): void
     {
         $this->assertSame('未知警告描述(0x01)', AlertDescription::toString(1));
         $this->assertSame('未知警告描述(0xC8)', AlertDescription::toString(200));
         $this->assertSame('未知警告描述(0xFF)', AlertDescription::toString(255));
+    }
+
+    public function testToArray(): void
+    {
+        $result = AlertDescription::CLOSE_NOTIFY->toArray();
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('value', $result);
+        $this->assertArrayHasKey('label', $result);
+
+        $this->assertSame(0, $result['value']);
+        $this->assertSame('关闭通知', $result['label']);
+
+        // 测试另一个枚举值
+        $result2 = AlertDescription::UNEXPECTED_MESSAGE->toArray();
+        $this->assertSame(10, $result2['value']);
+        $this->assertSame('意外消息', $result2['label']);
     }
 }

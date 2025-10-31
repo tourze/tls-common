@@ -1,12 +1,12 @@
 <?php
 
-namespace Tourze\TLSCommon\Exception;
+declare(strict_types=1);
 
-use Exception;
+namespace Tourze\TLSCommon\Exception;
 
 /**
  * TLS协议相关异常的基类
  */
-class TLSException extends Exception
+abstract class TLSException extends \Exception
 {
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\TLSCommon\Protocol;
 
 use Tourze\EnumExtra\Itemable;
@@ -156,7 +158,7 @@ enum HandshakeType: int implements Itemable, Labelable, Selectable
     public static function toString(int $type): string
     {
         $enum = self::fromInt($type);
-        if ($enum !== null) {
+        if (null !== $enum) {
             return $enum->asString();
         }
 

@@ -2,20 +2,24 @@
 
 namespace Tourze\TLSCommon\Tests\Exception;
 
-use Exception;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Tourze\PHPUnitBase\AbstractExceptionTestCase;
 use Tourze\TLSCommon\Exception\ProtocolException;
 use Tourze\TLSCommon\Exception\TLSException;
 
-final class ProtocolExceptionTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(ProtocolException::class)]
+final class ProtocolExceptionTest extends AbstractExceptionTestCase
 {
-    public function testInstanceOfTLSException()
+    public function testInstanceOfTLSException(): void
     {
         $exception = new ProtocolException();
         $this->assertInstanceOf(TLSException::class, $exception);
     }
 
-    public function testConstructor_withDefaultParams()
+    public function testConstructorWithDefaultParams(): void
     {
         $exception = new ProtocolException();
         $this->assertSame('', $exception->getMessage());
@@ -23,14 +27,14 @@ final class ProtocolExceptionTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testConstructor_withCustomParams()
+    public function testConstructorWithCustomParams(): void
     {
         $message = 'Protocol error message';
         $code = 1001;
-        $previous = new Exception('Previous exception');
-        
+        $previous = new \Exception('Previous exception');
+
         $exception = new ProtocolException($message, $code, $previous);
-        
+
         $this->assertSame($message, $exception->getMessage());
         $this->assertSame($code, $exception->getCode());
         $this->assertSame($previous, $exception->getPrevious());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\TLSCommon\Utils;
 
 use Tourze\TLSCommon\Exception\InvalidArgumentException;
@@ -28,7 +30,7 @@ class ByteBuffer
      */
     public function __construct(string $initialData = '')
     {
-        if ($initialData !== '') {
+        if ('' !== $initialData) {
             $this->buffer = $initialData;
         }
     }
@@ -48,6 +50,7 @@ class ByteBuffer
     public function append(string $data): self
     {
         $this->buffer .= $data;
+
         return $this;
     }
 
@@ -78,14 +81,13 @@ class ByteBuffer
     /**
      * 设置当前读取位置
      */
-    public function setPosition(int $position): self
+    public function setPosition(int $position): void
     {
         if ($position < 0 || $position > strlen($this->buffer)) {
             throw new OutOfBoundsException('位置超出缓冲区范围');
         }
 
         $this->position = $position;
-        return $this;
     }
 
     /**
@@ -103,6 +105,7 @@ class ByteBuffer
 
         $data = substr($this->buffer, $this->position, $length);
         $this->position += $length;
+
         return $data;
     }
 
@@ -112,6 +115,7 @@ class ByteBuffer
     public function readUint8(): int
     {
         $data = $this->read(1);
+
         return ord($data);
     }
 
@@ -121,6 +125,7 @@ class ByteBuffer
     public function readUint16(): int
     {
         $data = $this->read(2);
+
         return (ord($data[0]) << 8) | ord($data[1]);
     }
 
@@ -130,6 +135,7 @@ class ByteBuffer
     public function readUint24(): int
     {
         $data = $this->read(3);
+
         return (ord($data[0]) << 16) | (ord($data[1]) << 8) | ord($data[2]);
     }
 
@@ -155,6 +161,7 @@ class ByteBuffer
         }
 
         $this->buffer .= chr($value);
+
         return $this;
     }
 
@@ -168,6 +175,7 @@ class ByteBuffer
         }
 
         $this->buffer .= chr(($value >> 8) & 0xFF) . chr($value & 0xFF);
+
         return $this;
     }
 
@@ -181,6 +189,7 @@ class ByteBuffer
         }
 
         $this->buffer .= chr(($value >> 16) & 0xFF) . chr(($value >> 8) & 0xFF) . chr($value & 0xFF);
+
         return $this;
     }
 
@@ -195,6 +204,7 @@ class ByteBuffer
 
         $this->buffer .= chr(($value >> 24) & 0xFF) . chr(($value >> 16) & 0xFF) .
             chr(($value >> 8) & 0xFF) . chr($value & 0xFF);
+
         return $this;
     }
 
@@ -204,6 +214,7 @@ class ByteBuffer
     public function write(string $data): self
     {
         $this->buffer .= $data;
+
         return $this;
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\TLSCommon\Protocol;
 
 use Tourze\EnumExtra\Itemable;
@@ -344,7 +346,7 @@ enum AlertDescription: int implements Itemable, Labelable, Selectable
     public static function toString(int $description): string
     {
         $enum = self::fromInt($description);
-        if ($enum !== null) {
+        if (null !== $enum) {
             return $enum->asString();
         }
 

@@ -2,12 +2,17 @@
 
 namespace Tourze\TLSCommon\Tests\Protocol;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Tourze\PHPUnitEnum\AbstractEnumTestCase;
 use Tourze\TLSCommon\Protocol\HandshakeType;
 
-final class HandshakeTypeTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(HandshakeType::class)]
+final class HandshakeTypeTest extends AbstractEnumTestCase
 {
-    public function testHandshakeTypeConstants()
+    public function testHandshakeTypeConstants(): void
     {
         $this->assertSame(1, HandshakeType::CLIENT_HELLO->value);
         $this->assertSame(2, HandshakeType::SERVER_HELLO->value);
@@ -20,7 +25,7 @@ final class HandshakeTypeTest extends TestCase
         $this->assertSame(20, HandshakeType::FINISHED->value);
     }
 
-    public function testAsString()
+    public function testAsString(): void
     {
         $this->assertSame('ClientHello', HandshakeType::CLIENT_HELLO->asString());
         $this->assertSame('ServerHello', HandshakeType::SERVER_HELLO->asString());
@@ -33,7 +38,7 @@ final class HandshakeTypeTest extends TestCase
         $this->assertSame('Finished', HandshakeType::FINISHED->asString());
     }
 
-    public function testFromInt_withValidValues()
+    public function testFromIntWithValidValues(): void
     {
         $this->assertSame(HandshakeType::CLIENT_HELLO, HandshakeType::fromInt(1));
         $this->assertSame(HandshakeType::SERVER_HELLO, HandshakeType::fromInt(2));
@@ -46,14 +51,14 @@ final class HandshakeTypeTest extends TestCase
         $this->assertSame(HandshakeType::FINISHED, HandshakeType::fromInt(20));
     }
 
-    public function testFromInt_withInvalidValues()
+    public function testFromIntWithInvalidValues(): void
     {
         $this->assertNull(HandshakeType::fromInt(0));
         $this->assertNull(HandshakeType::fromInt(100));
         $this->assertNull(HandshakeType::fromInt(-1));
     }
 
-    public function testToString_withValidValues()
+    public function testToStringWithValidValues(): void
     {
         $this->assertSame('ClientHello', HandshakeType::toString(1));
         $this->assertSame('ServerHello', HandshakeType::toString(2));
@@ -66,10 +71,27 @@ final class HandshakeTypeTest extends TestCase
         $this->assertSame('Finished', HandshakeType::toString(20));
     }
 
-    public function testToString_withInvalidValues()
+    public function testToStringWithInvalidValues(): void
     {
         $this->assertSame('未知握手类型(0x00)', HandshakeType::toString(0));
         $this->assertSame('未知握手类型(0x64)', HandshakeType::toString(100));
         $this->assertSame('未知握手类型(0xFF)', HandshakeType::toString(255));
+    }
+
+    public function testToArray(): void
+    {
+        $result = HandshakeType::CLIENT_HELLO->toArray();
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('value', $result);
+        $this->assertArrayHasKey('label', $result);
+
+        $this->assertSame(1, $result['value']);
+        $this->assertSame('客户端Hello', $result['label']);
+
+        // 测试另一个枚举值
+        $result2 = HandshakeType::SERVER_HELLO->toArray();
+        $this->assertSame(2, $result2['value']);
+        $this->assertSame('服务器Hello', $result2['label']);
     }
 }

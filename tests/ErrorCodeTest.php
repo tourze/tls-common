@@ -2,12 +2,17 @@
 
 namespace Tourze\TLSCommon\Tests;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\TLSCommon\ErrorCode;
 
+/**
+ * @internal
+ */
+#[CoversClass(ErrorCode::class)]
 final class ErrorCodeTest extends TestCase
 {
-    public function testErrorCodeConstants()
+    public function testErrorCodeConstants(): void
     {
         // 通用错误常量测试
         $this->assertSame(0, ErrorCode::SUCCESS);
@@ -35,7 +40,7 @@ final class ErrorCodeTest extends TestCase
         $this->assertSame(4002, ErrorCode::UNSUPPORTED_CIPHER);
     }
 
-    public function testGetMessage_withValidErrorCodes()
+    public function testGetMessageWithValidErrorCodes(): void
     {
         // 通用错误消息测试
         $this->assertSame('成功', ErrorCode::getMessage(ErrorCode::SUCCESS));
@@ -66,7 +71,7 @@ final class ErrorCodeTest extends TestCase
         $this->assertSame('不支持的加密套件', ErrorCode::getMessage(ErrorCode::UNSUPPORTED_CIPHER));
     }
 
-    public function testGetMessage_withInvalidErrorCode()
+    public function testGetMessageWithInvalidErrorCode(): void
     {
         // 测试未定义的错误码
         $this->assertSame('未定义的错误(5000)', ErrorCode::getMessage(5000));

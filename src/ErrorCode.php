@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\TLSCommon;
 
 /**
@@ -74,6 +76,7 @@ final class ErrorCode
 
     /**
      * 错误码对应的错误信息
+     * @var array<int, string>
      */
     private static array $errorMessages = [
         self::SUCCESS => '成功',

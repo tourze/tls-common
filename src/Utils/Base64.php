@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\TLSCommon\Utils;
 
 use Tourze\TLSCommon\Exception\InvalidArgumentException;
@@ -12,8 +14,9 @@ class Base64
     /**
      * 将二进制数据编码为Base64字符串
      *
-     * @param string $data 要编码的二进制数据
-     * @param bool $urlSafe 是否使用URL安全的Base64编码
+     * @param string $data    要编码的二进制数据
+     * @param bool   $urlSafe 是否使用URL安全的Base64编码
+     *
      * @return string Base64编码的字符串
      */
     public static function encode(string $data, bool $urlSafe = false): string
@@ -30,9 +33,11 @@ class Base64
     /**
      * 将Base64字符串解码为二进制数据
      *
-     * @param string $base64 要解码的Base64字符串
-     * @param bool $urlSafe 是否使用URL安全的Base64编码
+     * @param string $base64  要解码的Base64字符串
+     * @param bool   $urlSafe 是否使用URL安全的Base64编码
+     *
      * @return string 解码后的二进制数据
+     *
      * @throws InvalidArgumentException 如果输入不是有效的Base64字符串
      */
     public static function decode(string $base64, bool $urlSafe = false): string
@@ -53,7 +58,7 @@ class Base64
 
         $result = base64_decode($base64, true);
 
-        if ($result === false) {
+        if (false === $result) {
             throw new InvalidArgumentException('输入不是有效的Base64字符串');
         }
 
@@ -65,19 +70,23 @@ class Base64
      *
      * @param string $data 要编码的二进制数据
      * @param string $type PEM类型标识，如CERTIFICATE, PUBLIC KEY等
+     *
      * @return string PEM格式的字符串
      */
     public static function toPEM(string $data, string $type): string
     {
         $base64 = chunk_split(base64_encode($data), 64);
-        return "-----BEGIN $type-----\n$base64-----END $type-----\n";
+
+        return "-----BEGIN {$type}-----\n{$base64}-----END {$type}-----\n";
     }
 
     /**
      * 从PEM格式中提取二进制数据
      *
      * @param string $pem PEM格式的字符串
+     *
      * @return string 提取的二进制数据
+     *
      * @throws InvalidArgumentException 如果输入不是有效的PEM格式
      */
     public static function fromPEM(string $pem): string
@@ -87,16 +96,20 @@ class Base64
 
         // 提取Base64部分
         $pattern = '/-----BEGIN [^-]+-----\s*(.+?)\s*-----END [^-]+-----/s';
-        if (!preg_match($pattern, $pem, $matches)) {
+        if (0 === preg_match($pattern, $pem, $matches)) {
             throw new InvalidArgumentException('输入不是有效的PEM格式');
         }
 
         // 移除所有空白字符
         $base64 = preg_replace('/\s+/', '', $matches[1]);
 
+        if (null === $base64) {
+            throw new InvalidArgumentException('无法处理PEM格式中的Base64数据');
+        }
+
         $result = base64_decode($base64, true);
 
-        if ($result === false) {
+        if (false === $result) {
             throw new InvalidArgumentException('PEM格式中的Base64数据无效');
         }
 

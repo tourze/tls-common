@@ -2,20 +2,24 @@
 
 namespace Tourze\TLSCommon\Tests\Exception;
 
-use Exception;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Tourze\PHPUnitBase\AbstractExceptionTestCase;
 use Tourze\TLSCommon\Exception\SecurityException;
 use Tourze\TLSCommon\Exception\TLSException;
 
-final class SecurityExceptionTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(SecurityException::class)]
+final class SecurityExceptionTest extends AbstractExceptionTestCase
 {
-    public function testInstanceOfTLSException()
+    public function testInstanceOfTLSException(): void
     {
         $exception = new SecurityException();
         $this->assertInstanceOf(TLSException::class, $exception);
     }
 
-    public function testConstructor_withDefaultParams()
+    public function testConstructorWithDefaultParams(): void
     {
         $exception = new SecurityException();
         $this->assertSame('', $exception->getMessage());
@@ -23,14 +27,14 @@ final class SecurityExceptionTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testConstructor_withCustomParams()
+    public function testConstructorWithCustomParams(): void
     {
         $message = 'Security error message';
         $code = 2001;
-        $previous = new Exception('Previous exception');
-        
+        $previous = new \Exception('Previous exception');
+
         $exception = new SecurityException($message, $code, $previous);
-        
+
         $this->assertSame($message, $exception->getMessage());
         $this->assertSame($code, $exception->getCode());
         $this->assertSame($previous, $exception->getPrevious());

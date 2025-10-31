@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\TLSCommon;
 
 use Tourze\EnumExtra\Itemable;
@@ -7,16 +9,20 @@ use Tourze\EnumExtra\ItemTrait;
 use Tourze\EnumExtra\Labelable;
 use Tourze\EnumExtra\Selectable;
 use Tourze\EnumExtra\SelectTrait;
+use Tourze\TLSCommon\Protocol\TLSVersion;
 
 /**
- * TLS协议版本枚举
+ * TLS协议版本枚举（向后兼容）
  *
- * 参考: https://www.rfc-editor.org/rfc/rfc8446
+ * @deprecated 请使用 Tourze\TLSCommon\Protocol\TLSVersion 代替
+ *
+ * 这个类仅为向后兼容而存在，新代码应该使用 Protocol\TLSVersion
  */
 enum Version: int implements Itemable, Labelable, Selectable
 {
     use ItemTrait;
     use SelectTrait;
+
     /**
      * SSL 3.0 版本号
      */
@@ -47,31 +53,19 @@ enum Version: int implements Itemable, Labelable, Selectable
      */
     public function asString(): string
     {
-        return match ($this) {
-            self::SSL_3_0 => 'SSL 3.0',
-            self::TLS_1_0 => 'TLS 1.0',
-            self::TLS_1_1 => 'TLS 1.1',
-            self::TLS_1_2 => 'TLS 1.2',
-            self::TLS_1_3 => 'TLS 1.3',
-        };
+        return $this->toTLSVersion()->getName();
     }
 
     /**
      * 从整数值获取版本枚举
      *
      * @param int $version 版本号整数值
+     *
      * @return self|null 对应的枚举值，如果不存在则返回null
      */
     public static function fromInt(int $version): ?self
     {
-        return match ($version) {
-            self::SSL_3_0->value => self::SSL_3_0,
-            self::TLS_1_0->value => self::TLS_1_0,
-            self::TLS_1_1->value => self::TLS_1_1,
-            self::TLS_1_2->value => self::TLS_1_2,
-            self::TLS_1_3->value => self::TLS_1_3,
-            default => null,
-        };
+        return self::tryFrom($version);
     }
 
     /**
@@ -79,10 +73,7 @@ enum Version: int implements Itemable, Labelable, Selectable
      */
     public function isSupported(): bool
     {
-        return match ($this) {
-            self::TLS_1_0, self::TLS_1_1, self::TLS_1_2, self::TLS_1_3 => true,
-            default => false,
-        };
+        return $this->toTLSVersion()->isSupported();
     }
 
     /**
@@ -90,8 +81,8 @@ enum Version: int implements Itemable, Labelable, Selectable
      */
     public static function toString(int $version): string
     {
-        $enum = self::fromInt($version);
-        if ($enum !== null) {
+        $enum = self::tryFrom($version);
+        if (null !== $enum) {
             return $enum->asString();
         }
 
@@ -103,8 +94,8 @@ enum Version: int implements Itemable, Labelable, Selectable
      */
     public static function isSupportedVersion(int $version): bool
     {
-        $enum = self::fromInt($version);
-        if ($enum !== null) {
+        $enum = self::tryFrom($version);
+        if (null !== $enum) {
             return $enum->isSupported();
         }
 
@@ -116,12 +107,14 @@ enum Version: int implements Itemable, Labelable, Selectable
      */
     public function getLabel(): string
     {
-        return match ($this) {
-            self::SSL_3_0 => 'SSL 3.0 (不安全)',
-            self::TLS_1_0 => 'TLS 1.0 (已弃用)',
-            self::TLS_1_1 => 'TLS 1.1 (已弃用)',
-            self::TLS_1_2 => 'TLS 1.2',
-            self::TLS_1_3 => 'TLS 1.3 (推荐)',
-        };
+        return $this->toTLSVersion()->getLabel();
+    }
+
+    /**
+     * 转换为TLSVersion枚举
+     */
+    private function toTLSVersion(): TLSVersion
+    {
+        return TLSVersion::from($this->value);
     }
 }
